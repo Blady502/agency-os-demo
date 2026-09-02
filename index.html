@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agency OS — Demo</title>
+<meta name="description" content="Cómo un negocio nuevo se convierte en un agente de WhatsApp funcionando, en minutos.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Fondo interactivo de TODA la página (spotlight + manchas de color,
+       sesión aparte) — capa fija detrás de TODO (z-index:-1, ver
+       styles.css), independiente del fondo propio del hero de abajo.
+       Nunca compite con el hover de los nodos: la tarjeta del flujo es
+       opaca y lo tapa naturalmente donde se superpone; esto solo se ve
+       en los márgenes/gutters alrededor. -->
+  <div class="page-bg" aria-hidden="true">
+    <div class="page-blob page-blob-1"></div>
+    <div class="page-blob page-blob-2"></div>
+    <div class="page-blob page-blob-3"></div>
+    <div class="page-spotlight"></div>
+  </div>
+
+  <header class="hero">
+    <!-- Fondo interactivo (spotlight + parallax), aditivo — ver
+         interactive-bg.js. aria-hidden porque es puramente decorativo,
+         nunca contenido. pointer-events:none (en CSS) para que nunca
+         intercepte nada, ni siquiera acá arriba del hero. -->
+    <div class="hero-bg" aria-hidden="true">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+      <div class="spotlight"></div>
+    </div>
+    <div class="hero-inner">
+      <div class="brand">Agency<em>OS</em></div>
+      <h1>De un negocio nuevo a un agente de WhatsApp<br>funcionando, en minutos.</h1>
+      <p class="hero-sub">Así es el proceso real, paso a paso — pasá el mouse sobre cada nodo.</p>
+    </div>
+  </header>
+
+  <main class="stage">
+    <div class="node-flow" aria-label="Flujo de alta de un cliente nuevo">
+
+      <div class="node" tabindex="0">
+        <div class="node-icon">🏢</div>
+        <h2 class="node-title">Tu negocio</h2>
+        <p class="node-sub">Restaurante La Terraza</p>
+        <div class="node-detail">
+          <p>Reservaciones, horarios y menú, todo por WhatsApp — le contás tu negocio con tus propias palabras, sin formularios eternos.</p>
+        </div>
+      </div>
+
+      <div class="connector" aria-hidden="true"></div>
+
+      <div class="node" tabindex="0">
+        <div class="node-icon">🧠</div>
+        <h2 class="node-title">Agency Brain analiza</h2>
+        <p class="node-sub">Confianza: 96%</p>
+        <div class="node-detail">
+          <p>La IA clasifica tu negocio contra un catálogo real de capacidades — vertical detectado: <strong>Restaurante</strong>.</p>
+        </div>
+      </div>
+
+      <div class="connector" aria-hidden="true"></div>
+
+      <div class="node" tabindex="0">
+        <div class="node-icon">🧩</div>
+        <h2 class="node-title">Módulos activados</h2>
+        <p class="node-sub">3 módulos</p>
+        <div class="node-detail">
+          <p>Atención al cliente · Reservaciones · Recordatorios automáticos — solo lo que tu negocio necesita, nada de más.</p>
+        </div>
+      </div>
+
+      <div class="connector" aria-hidden="true"></div>
+
+      <div class="node" tabindex="0">
+        <div class="node-icon">🔑</div>
+        <h2 class="node-title">Credenciales conectadas</h2>
+        <p class="node-sub">2 integraciones</p>
+        <div class="node-detail">
+          <p>WhatsApp Business y Google Calendar, conectados una sola vez — el agente ya puede agendar y confirmar de verdad.</p>
+        </div>
+      </div>
+
+      <div class="connector" aria-hidden="true"></div>
+
+      <div class="node node--final" tabindex="0">
+        <div class="node-icon">🚀</div>
+        <h2 class="node-title">Cliente activo</h2>
+        <p class="node-sub">En vivo</p>
+        <div class="node-detail">
+          <p>El agente ya está respondiendo mensajes reales — en minutos, no semanas.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="stage-caption">Datos de ejemplo — así se ve armar tu propio negocio.</p>
+
+    <!-- TODO (antes de mostrarle esto a cualquier prospecto real):
+         reemplazar este href placeholder por tu email o WhatsApp real
+         (ej. "mailto:vos@tuagencia.com" o "https://wa.me/502XXXXXXXX")
+         — todavía no existen (decisión explícita, sesión 2026-09-02).
+         Nunca se muestra texto de "TODO" en la página en sí, solo acá
+         en el código. -->
+    <div class="cta-wrap">
+      <a href="#contacto" class="cta">
+        Quiero esto para mi negocio
+        <span class="cta-arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <p>Agency OS — automatización con IA para negocios reales.</p>
+  </footer>
+
+  <script src="interactive-bg.js" defer></script>
+  <script src="scroll-reveal.js" defer></script>
+</body>
+</html>
