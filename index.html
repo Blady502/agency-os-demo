@@ -40,7 +40,13 @@
   </header>
 
   <main class="stage">
-    <div class="node-flow" aria-label="Flujo de alta de un cliente nuevo">
+    <!-- .node-flow-wrap + .node-flow-backer: arreglo del bug de las
+         esquinas (2ª vuelta) — ver styles.css para el detalle completo
+         de por qué es un hermano en un grid y no un ::before con
+         z-index. El orden acá importa: el backer va PRIMERO. -->
+    <div class="node-flow-wrap">
+      <div class="node-flow-backer" aria-hidden="true"></div>
+      <div class="node-flow" aria-label="Flujo de alta de un cliente nuevo">
 
       <div class="node" tabindex="0">
         <div class="node-icon">🏢</div>
@@ -95,6 +101,7 @@
         </div>
       </div>
 
+      </div>
     </div>
 
     <p class="stage-caption">Datos de ejemplo — así se ve armar tu propio negocio.</p>
