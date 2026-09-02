@@ -140,7 +140,17 @@ body {
 }
 .node-flow-backer {
   background: var(--color-bg);
-  border-radius: 0; /* cuadrado a propósito — ver el comentario de arriba */
+  /* BUG real encontrado por el usuario: tenía `border-radius: 0` parejo
+     en las 4 esquinas — cuadrado en las 4. Arriba hace falta (rellena
+     el huequito que deja el redondeado de .node-flow donde .hero se
+     superpone) pero ABAJO nunca hizo falta ningún relleno (nunca hubo
+     nada que tapar ahí) — el cuadrado del hermano sobresalía por detrás
+     de la curva del contenedor real, sin ningún propósito. Ahora
+     cuadrado SOLO arriba, redondeado abajo — mismo valor exacto que
+     `border-radius` de .node-flow (ver esa regla) — así el hermano
+     sigue el mismo contorno de .node-flow en las esquinas de abajo,
+     sin sobresalir nada. */
+  border-radius: 0 0 16px 16px;
 }
 
 .node-flow {
