@@ -119,7 +119,19 @@ body {
   border-radius: 16px;
   box-shadow: var(--shadow-lg);
   padding: 1.75rem 1.25rem;
-  overflow-x: auto;
+  /* `overflow-x: auto` SACADO a propósito (ver el comentario largo del
+     media query de abajo, `max-width: 860px`, para el porqué exacto —
+     tiene que ver con el panel flotante nuevo de .node-detail). */
+  /* Margen de seguridad para el panel flotante de .node-detail: como
+     ya no empuja el layout (a propósito), necesita espacio VACÍO
+     reservado abajo para no superponerse con el texto/botón que sigue
+     (.stage-caption/.cta-wrap) cuando el panel del nodo con más texto
+     esté abierto. Valor generoso, estimado para el peor caso (no
+     medido pixel a pixel en un navegador real) — si algún texto futuro
+     más largo todavía se corta, subir este número. En columna
+     (celular) se anula, ver el media query de abajo: ahí el panel
+     vuelve a empujar el layout normalmente, no hace falta reservar nada. */
+  margin-bottom: 7rem;
 }
 /* El respaldo real (arreglo definitivo del bug geométrico #2): un
    redondeado SIEMPRE deja sin pintar un triangulito justo en la
@@ -145,6 +157,17 @@ body {
 }
 
 .node {
+  /* `position: relative` VIVE ACÁ AHORA (antes solo en :hover/:focus) —
+     BUG real encontrado por el usuario, arreglado: .node-detail crecía
+     DENTRO del flujo normal (max-height 0 → 12rem), y como .node-flow
+     usa `align-items: stretch`, TODAS las tarjetas se estiran para
+     igualar a la más alta de la fila — el nodo con más texto
+     ("Credenciales conectadas") empujaba TODA la fila (y la página)
+     hacia abajo, apareciendo una barra de scroll. Ver .node-detail más
+     abajo — ahora es un panel flotante, position:absolute, que
+     necesita este `position: relative` como referencia SIEMPRE
+     presente (no solo al pasar el mouse). */
+  position: relative;
   flex: 1 1 0;
   min-width: 9.5rem;
   background: var(--color-surface);
@@ -172,7 +195,6 @@ body {
   box-shadow: var(--shadow-md);
   border-color: var(--color-primary);
   z-index: 2;
-  position: relative;
 }
 
 .node-icon {
@@ -189,20 +211,41 @@ body {
 .node-title { font-size: 0.95rem; font-weight: 700; margin: 0 0 0.25rem; letter-spacing: -0.01em; }
 .node-sub { font-size: 0.8rem; font-weight: 600; color: var(--color-primary); margin: 0; }
 
-/* Detalle: oculto por defecto (altura 0), revelado al expandirse el
-   nodo — así el "expandir" es real (crece el bloque), no solo un tooltip
-   flotante encima. */
+/* Detalle: AHORA un panel flotante debajo del nodo (position:absolute),
+   no un bloque que crece adentro — decisión confirmada con el usuario
+   tras el bug real de arriba (el nodo con más texto empujaba TODA la
+   fila y la página). Al quedar afuera del flujo normal, su alto NUNCA
+   afecta el alto de .node-flow — pasar el mouse por CUALQUIER nodo,
+   sin importar cuánto texto tenga, jamás mueve el resto de la página. */
 .node-detail {
-  max-height: 0;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 0.6rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-md);
+  padding: 0.85rem 0.9rem;
   opacity: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease, opacity 0.25s ease 0.05s, margin-top 0.3s ease;
+  visibility: hidden;
+  transform: translateY(-6px);
+  /* El `visibility` se retrasa a la salida (para que alcance a
+     desvanecerse) pero NUNCA a la entrada (aparece de inmediato al
+     pasar el mouse) — mismo truco que .cta usa implícitamente vía
+     opacity, acá explícito porque hace falta ocultarlo también de
+     lectores de pantalla/tab cuando no está visible. */
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s linear 0.22s;
+  pointer-events: none; /* es solo texto informativo, no hace falta que sea clickeable */
+  z-index: 5; /* por encima de los conectores y nodos vecinos, nunca por debajo */
 }
 .node:hover .node-detail,
 .node:focus .node-detail {
-  max-height: 12rem;
   opacity: 1;
-  margin-top: 0.75rem;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s linear 0s;
 }
 .node-detail p {
   margin: 0;
@@ -347,9 +390,23 @@ body {
 }
 
 /* ── Angosto (celular, o una tablet en vertical): el flujo pasa a
-   columna, los conectores rotan a verticales. Sigue siendo 0 JS. ── */
-@media (max-width: 760px) {
-  .node-flow { flex-direction: column; overflow-x: visible; }
+   columna, los conectores rotan a verticales. Sigue siendo 0 JS.
+   Punto de corte movido de 760px a 860px (bug real encontrado al
+   arreglar el panel flotante de .node-detail): 5 nodos a su
+   min-width (9.5rem) más el padding de .node-flow (2.5rem) y de
+   .stage (3rem) necesitan mínimo 53rem = 848px para no apretarse —
+   por debajo de eso, ANTES esto se resolvía con `overflow-x: auto` en
+   .node-flow (scroll horizontal adentro de la tarjeta). Pero
+   `overflow-x` distinto de `visible` OBLIGA a que `overflow-y` deje de
+   ser `visible` también (regla real de CSS, no un descuido) — y eso
+   recortaba el panel flotante nuevo, que necesita salirse verticalmente
+   de la tarjeta sin que nada lo corte. Arreglo de raíz: subir el punto
+   de corte a 860px (con margen sobre los 848px calculados, cubre
+   anchos reales como una tablet en vertical de 768px) para que la fila
+   NUNCA necesite `overflow-x`, y así puede quedar en `visible` en los
+   dos ejes siempre. */
+@media (max-width: 860px) {
+  .node-flow { flex-direction: column; margin-bottom: 0; }
   .node { min-width: 0; }
   .connector { width: 2px; height: 1.75rem; flex: 0 0 1.75rem; align-self: center; background: linear-gradient(180deg, var(--color-border), var(--color-primary), var(--color-border)); }
   /* Vertical acá — los puntos viajan de arriba a abajo, no de
@@ -366,6 +423,36 @@ body {
     transform: scale(0.97);
   }
   .node:hover, .node:focus { transform: scale(1.03); }
+
+  /* El panel flotante de .node-detail (arreglo del bug de la fila que
+     empujaba la página) NO funciona bien acá: en columna, los nodos
+     están apilados muy cerca uno del otro — el panel del nodo de
+     arriba se superpondría visualmente con la tarjeta del nodo de
+     ABAJO. Acá NO hace falta el panel flotante de todos modos: en
+     táctil, el hover real de mouse no aplica (es tap), así que
+     "crece en el lugar" (el comportamiento original, antes del bug)
+     es lo esperado — y en columna, un poco de scroll extra al tocar un
+     nodo es un patrón de acordeón normal en celular, no el problema
+     que se reportó (ese era específico de la fila en escritorio). */
+  .node-detail {
+    position: static;
+    margin-top: 0;
+    max-height: 0;
+    opacity: 0;
+    visibility: visible;
+    overflow: hidden;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+    transform: none;
+    transition: max-height 0.3s ease, opacity 0.25s ease 0.05s, margin-top 0.3s ease;
+  }
+  .node:hover .node-detail,
+  .node:focus .node-detail {
+    max-height: 12rem;
+    opacity: 1;
+    margin-top: 0.75rem;
+  }
 }
 
 /* ── Fondo interactivo del hero (aditivo, sesión aparte — ver
