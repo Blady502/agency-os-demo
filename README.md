@@ -1,8 +1,8 @@
-# Human-OS — demo
+# Human-OS — página pública
 
-Página de demo visual para ventas — pensada para mostrarle a un
-cliente potencial, en una demo comercial, cómo un negocio nuevo se
-convierte en un agente de WhatsApp funcionando.
+Página pública de **Human-OS** (la empresa), servida con GitHub Pages en
+https://www.human-os.com.gt. Presenta los servicios de la empresa y su
+primer producto, **AgencyOS**.
 
 Este repo es una **copia pública, aislada**, del contenido que vive en
 `demo-site/` dentro del repo principal (privado) de Human-OS —
@@ -12,26 +12,27 @@ GitHub Pro). Si editás el contenido, hacelo también en el repo
 principal (o al revés) — no hay sincronización automática entre los
 dos.
 
+## Archivos
+
+- `index.html` — la página completa: HTML, CSS y JS en un solo archivo,
+  sin build, sin framework, sin dependencias (solo las fuentes de
+  Google Fonts).
+- `logo-A-human-os.svg` — hoja de logo (versión oscura y clara, con
+  tamaños de referencia). La página no la carga; el logo va inline en
+  `index.html`.
+- `CNAME` — dominio de GitHub Pages (`www.human-os.com.gt`). **No
+  borrar ni editar**: sin él se rompe el dominio.
+
 ## Qué es (y qué NO es)
 
-- **100% estático**: `index.html` + `styles.css` + `interactive-bg.js` +
-  `scroll-reveal.js`, sin build, sin framework, sin dependencias.
-- **Sin backend**: no llama a ninguna API real. Todo el contenido (el
-  análisis de Agency Brain, los módulos activados, las credenciales) es
-  **de ejemplo, fijo en el HTML** — costo **$0** cada vez que se
-  muestra, sin importar cuántas veces.
-- El efecto de "el nodo bajo el mouse se expande, los demás bajan
-  opacidad" es CSS puro (`:hover`/`:focus` + selectores de hermanos).
-- **Única excepción a "sin JS"**: `interactive-bg.js` (fondo
-  interactivo: spotlight + manchas de color que reaccionan al mouse,
-  en el hero y en toda la página) y `scroll-reveal.js` (animación de
-  entrada al hacer scroll, vía `IntersectionObserver`, una sola vez por
-  elemento). Ninguno usa dependencias externas. Ambos respetan
-  `prefers-reduced-motion` y no rompen nada en dispositivos táctiles.
-- **Botón de llamada a la acción con destino PLACEHOLDER** — `.cta` en
-  `index.html` apunta a `#contacto`, marcado con un comentario `TODO`
-  en el código (nunca texto visible en la página). Reemplazalo por tu
-  email o WhatsApp real antes de mostrarle esto a cualquier prospecto.
+- **100% estático, sin backend**: no llama a ninguna API. Las cifras del
+  panel de AgencyOS son **de ejemplo** (la página lo dice).
+- Animaciones (fondo interactivo, mapa de servicios que se arma al
+  hacer scroll, entradas al hacer scroll) en JS propio, sin librerías.
+  Todas respetan `prefers-reduced-motion`.
+- El botón de contacto abre WhatsApp. El número y el texto del mensaje
+  están al inicio del `<script>` en `index.html` (`WHATSAPP_NUMBER`,
+  `WHATSAPP_TEXT`).
 
 ## Ver en local
 
@@ -44,6 +45,6 @@ npx serve .
 
 ## Editar el contenido
 
-Los 5 nodos del flujo viven directo en `index.html` (`<div class="node">`) —
-cambiar el texto ahí no requiere tocar `styles.css` ni ningún otro
-archivo.
+- Los servicios del mapa interactivo viven en el arreglo `SERVICES`
+  dentro del `<script>` de `index.html`.
+- El resto del texto está directo en el HTML de cada sección.
