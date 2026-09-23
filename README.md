@@ -1,11 +1,11 @@
-# Agency OS — demo
+# Human-OS — demo
 
 Página de demo visual para ventas — pensada para mostrarle a un
 cliente potencial, en una demo comercial, cómo un negocio nuevo se
 convierte en un agente de WhatsApp funcionando.
 
 Este repo es una **copia pública, aislada**, del contenido que vive en
-`demo-site/` dentro del repo principal (privado) de Agency OS —
+`demo-site/` dentro del repo principal (privado) de Human-OS —
 separado a propósito para poder usar GitHub Pages sin necesidad de un
 plan de pago (Pages en un repo privado de una cuenta personal requiere
 GitHub Pro). Si editás el contenido, hacelo también en el repo
